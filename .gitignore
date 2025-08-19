@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.vscode/
+*.pyo
+notes.txt
+__init__.py
