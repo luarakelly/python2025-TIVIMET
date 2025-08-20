@@ -1,7 +1,20 @@
+# === IDE / Editor Settings ===
+.vscode/
+
+# === Virtual Environment ===
 .venv/
+
+# === Python Bytecode and Caches ===
 __pycache__/
 *.pyc
-.vscode/
 *.pyo
-notes.txt
+
+# === Logs ===
+*.log
+
+# === Project Metadata Files ===
 __init__.py
+
+# === Personal Notes ===
+notes.txt
+luokka_tehtavia/
