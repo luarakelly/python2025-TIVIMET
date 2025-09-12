@@ -18,3 +18,6 @@ __init__.py
 # === Personal Notes ===
 notes.txt
 luokka_tehtavia/
+
+# === secret variables ===
+.env
