@@ -32,7 +32,7 @@ def lentokenttien_lukumäärät_tyypeittäin(maakoodin):
 
     counter = {}
     for row in lentokenta_tyypit:
-        print(row)
+        #print(row)
         lentokenta_tyypi = row[0] 
         if lentokenta_tyypi in counter:
             counter[lentokenta_tyypi] += 1
