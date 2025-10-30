@@ -1,65 +1,67 @@
 import random
 
-# --- Assuming Auto class from previous task ---
-class Auto:
-    def __init__(self, nimi, max_nopeus):
-        self.nimi = nimi
-        self.max_nopeus = max_nopeus  # max speed in km/h
-        self.nopeus = random.randint(0, max_nopeus)  # current speed
-        self.matka = 0  # distance travelled in km
+class Car:
+    def __init__(self, registration, max_speed):
+        """Initializes the car with registration, max speed, and sets the current speed and distance to zero."""
+        self.registration = registration
+        self.max_speed = max_speed
+        self.current_speed = 0
+        self.distance_travelled = 0
+    
+    def accelerate(self, speed_change):
+        """Changes the car's speed. Speed cannot exceed max_speed or go below 0."""
+        new_speed = self.current_speed + speed_change
+        if new_speed > self.max_speed:
+            self.current_speed = self.max_speed
+        elif new_speed < 0:
+            self.current_speed = 0
+        else:
+            self.current_speed = new_speed
+    
+    def drive(self, hours):
+        """Increases the traveled distance based on the current speed for the given number of hours."""
+        distance_covered = self.current_speed * hours
+        self.distance_travelled += distance_covered
 
-    def arvo_nopeusmuutos(self):
-        # Randomly change speed by -10 to +10 km/h
-        muutos = random.randint(-10, 10)
-        self.nopeus += muutos
-        # Ensure speed stays within 0 and max_nopeus
-        self.nopeus = max(0, min(self.nopeus, self.max_nopeus))
+# --- Kilpailu (Race) class ---
+class Race:
+    def __init__(self, name, distance_km, cars):
+        self.name = name
+        self.distance_km = distance_km
+        self.cars = cars
 
-    def kulje(self):
-        self.matka += self.nopeus
+    def hour_passes(self):
+        for car in self.cars:
+            speed_change = random.randint(-10, 15)
+            car.accelerate(speed_change)
+            car.drive(1)
 
+    def print_status(self):
+        print(f"\n{'Car':<12} {'Distance(km)':>15} {'Speed(km/h)':>15}")
+        print("-" * 45)
+        for car in self.cars:
+            print(f"{car.registration:<12} {car.distance_travelled:>15.1f} {car.current_speed:>15}")
 
-# --- Kilpailu class ---
-class Kilpailu:
-    def __init__(self, nimi, pituus_km, autot):
-        self.nimi = nimi
-        self.pituus_km = pituus_km
-        self.autot = autot
-
-    def tunti_kuluu(self):
-        for auto in self.autot:
-            auto.arvo_nopeusmuutos()
-            auto.kulje()
-
-    def tulosta_tilanne(self):
-        print(f"\n{'Auto':<10} {'Matka(km)':>10} {'Nopeus(km/h)':>15}")
-        print("-" * 37)
-        for auto in self.autot:
-            print(f"{auto.nimi:<10} {auto.matka:>10.1f} {auto.nopeus:>15}")
-
-    def kilpailu_ohi(self):
-        for auto in self.autot:
-            if auto.matka >= self.pituus_km:
-                return True
-        return False
+    def is_over(self):
+        return any(car.distance_travelled >= self.distance_km for car in self.cars)
 
 
 # --- Main program ---
-# Create 10 cars
-autot = [Auto(f"Auto{i+1}", random.randint(100, 200)) for i in range(10)]
+# Create 10 cars with random max speed between 100 and 200 km/h
+cars = [Car(f"ABC-{i+1}", random.randint(100, 200)) for i in range(10)]
 
 # Create race
-suuri_romuralli = Kilpailu("Suuri romuralli", 8000, autot)
+big_race = Race("Suuri romuralli", 8000, cars)
 
-tunnit = 0
-while not suuri_romuralli.kilpailu_ohi():
-    suuri_romuralli.tunti_kuluu()
-    tunnit += 1
-    # Print every 10 hours
-    if tunnit % 10 == 0:
-        print(f"\nTilanne tunnin {tunnit} jälkeen:")
-        suuri_romuralli.tulosta_tilanne()
+hours = 0
+while not big_race.is_over():
+    big_race.hour_passes()
+    hours += 1
+    # Print status every 10 hours
+    if hours % 10 == 0:
+        print(f"\nStatus after hour {hours}:")
+        big_race.print_status()
 
-# Print final standings
-print(f"\nKilpailu päättyi tunnin {tunnit} jälkeen!")
-suuri_romuralli.tulosta_tilanne()
+# Print final results
+print(f"\nRace ended after {hours} hours!")
+big_race.print_status()
